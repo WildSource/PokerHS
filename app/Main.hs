@@ -4,4 +4,4 @@ import Game.Deck
 
 main :: IO ()
 main = do
-    print $ cardCount createDeck
+    print $ shuffleDeck createDeck 6

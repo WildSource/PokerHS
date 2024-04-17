@@ -1,12 +1,8 @@
 module Game.Deck (
     createDeck,
     shuffleDeck,
-    cardCount,
-    Deck,
-    Card
 ) where
 
-import System.Random.Shuffle
 
 data Card = Spade Int | Club Int | Heart Int | Diamond Int 
     deriving Show
@@ -22,10 +18,27 @@ createDeck =
         [Heart number| number <- range]++
         [Diamond number| number <- range]
 
-shuffleDeck :: Deck a -> Deck a
-shuffleDeck (Deck cards) =
-    Deck $ shuffle cards [1..52]
+shuffleDeck :: Deck [Card] -> Int -> Deck [Card]
+shuffleDeck deck 0 = deck
+shuffleDeck deck shuffleCount =
+    shuffleDeck (riffleShuffle deck) $ shuffleCount - 1    
 
-cardCount :: Deck a -> Int
-cardCount (Deck cards) = 
+riffleShuffle :: Deck [Card] -> Deck [Card]
+riffleShuffle deck =
+   shuffle $ splitDeck deck 
+    
+splitDeck :: Deck a -> ([Card],[Card])
+splitDeck (Deck cards) = 
+    splitAt (middleIndex cards) cards
+    where
+        middleIndex :: [Card] -> Int 
+        middleIndex cardList = 
+            div (cardCount cardList) 2
+
+shuffle :: ([Card],[Card]) -> Deck [Card]
+shuffle (firstHalf,secondHalf) =
+  Deck $ concat [[card1, card2] | card1 <- firstHalf, card2 <- secondHalf]     
+
+cardCount :: [Card] -> Int
+cardCount cards = 
     length cards
