@@ -4,4 +4,5 @@ import Game.Deck
 
 main :: IO ()
 main = do
-    print $ shuffleDeck createDeck 6
+    let deck = createDeck 
+    print $ shuffleNTime (riffleShuffle) deck 1
